@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tecio"
+version = "2.0.0"
+authors = [
+  { name="Han Luo", email="6806720+luohancfd@users.noreply.github.com" },
+]
+dependencies = [
+  "construct >= 2.10.67",
+  "numpy"
+]
+description = "A pure python package to read and write Tecplot binary data"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Operating System :: OS Independent",
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Topic :: Scientific/Engineering"
+]
+license = {file = "LICENSE.txt"}
+
+[project.urls]
+"Homepage" = "https://github.com/luohancfd/tecio"
+"Bug Tracker" = "https://github.com/luohancfd/tecio/issues"

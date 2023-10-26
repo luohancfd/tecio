@@ -1,0 +1,28 @@
+
+VARIABLES="X" "Y"
+ZONE I=4 DATAPACKING=POINT AUXDATA A="TXT"
+1 1
+2 1
+2 2
+1 2
+TEXT X=10 Y=90 T="Simple Text" H=5 HU=FRAME AN=CENTER
+GEOMETRY X=50, Y=50, T=LINE, C=BLACK
+2
+3
+0 1
+0 0
+2 0
+2
+0 0
+1 2
+
+VARAUXDATA 1 MyData="Hello"
+VARAUXDATA 1 MoreData="World"
+VARAUXDATA 2 MyData="More information"
+VARAUXDATA 2 MoreData="hi mom"
+VARAUXDATA 2 MyExtraData="Some extra data"
+
+DATASETAUXDATA MachNo = "1.2"
+DATASETAUXDATA Alpha = "5"
+DATASETAUXDATA RefTemperature = "250"
+DATASETAUXDATA RefPressure = "101325"
