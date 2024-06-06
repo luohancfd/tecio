@@ -1,7 +1,7 @@
 # TecIO
 
-![pypi](https://img.shields.io/pypi/v/tecio.svg?logo=python&logoColor=white) ![GitHub Tag](https://img.shields.io/github/v/tag/luohancfd/tecio?color=green)
-![python](https://img.shields.io/badge/python>=3.9-blue.svg) ![GitHub License](https://img.shields.io/github/license/luohancfd/tecio)
+[![pypi](https://img.shields.io/pypi/v/tecio.svg?logo=python&logoColor=white)](https://pypi.org/project/tecio/) [![GitHub Tag](https://img.shields.io/github/v/tag/luohancfd/tecio?color=green)](https://github.com/luohancfd/tecio/releases)
+![python](https://img.shields.io/badge/python>=3.9-blue.svg) [![License](https://img.shields.io/github/license/luohancfd/tecio)](https://github.com/luohancfd/tecio/blob/master/LICENSE.txt)
 
 
 ## Introduction
