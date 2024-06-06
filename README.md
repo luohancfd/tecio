@@ -5,9 +5,11 @@
 
 
 ## Introduction
-TecIO is a pure Python package licensed under GPL v3, created by Han Luo, designed to facilitate the reading and writing of data files in the Tecplot format. Please note that Tecplot is a registered trademark belonging to Tecplot, Inc. This package is not affiliated with or endorsed by Tecplot, Inc.
+TecIO is a pure Python package licensed under GPL v3, designed to facilitate the reading and writing of data files in the Tecplot&reg; binary format. Please note that Tecplot&reg; is a registered trademark belonging to Tecplot, Inc in the United States and other countries. This package is not affiliated with or endorsed by Tecplot, Inc.
 
-TecIO is written entirely in Python and does not require the installation of Tecplot or possession of a Tecplot license. However, you need to have [preplot](https://tecplot.com/2017/01/05/preplot-szl-convert-overview/) to read ASCII format file.
+TecIO is written entirely in Python and does not require the installation of Tecplot products; or possession of a Tecplot license. However, you need to have [Preplot&trade;](https://tecplot.com/2017/01/05/preplot-szl-convert-overview/) to read ASCII format file.
+
+Tecplot binary file format can be found at [360 data format guid](https://raw.githubusercontent.com/su2code/SU2/master/externals/tecio/360_data_format_guide.pdf) Appendix A.
 
 ## Installation
 You can install TecIO using pip:
@@ -28,8 +30,11 @@ Check `test` folder
 ## License
 TecIO is licensed under the GPL v3 license. See [LICENSE](LICENSE) for more details.
 
+![GPL v3 License](https://www.gnu.org/graphics/gplv3-or-later.svg)
+
 ## Disclaimer
-Tecplot is a registered trademark of Tecplot, Inc. This package is not affiliated with or endorsed by Tecplot, Inc.
+
+Tecplot®, Tecplot 360,™ Tecplot 360 EX,™ Tecplot Focus, the Tecplot product logos, Preplot,™ Enjoy the View,™ Master the View,™ SZL,™ Sizzle,™ and Framer™ are registered trademarks or trademarks of Tecplot, Inc. in the United States and other countries. All other product names mentioned herein are trademarks or registered trademarks of their respective owners. This package is not affiliated with or endorsed by Tecplot, Inc.
 
 ## Support and Contributions
 For any issues or feature requests, please open an issue on [GitHub](https://github.com/luohancfd/tecio).
