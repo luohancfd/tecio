@@ -9,7 +9,7 @@ TecIO is a pure Python package licensed under GPL v3, designed to facilitate the
 
 TecIO is written entirely in Python and does not require the installation of Tecplot products; or possession of a Tecplot license. However, you need to have [Preplot&trade;](https://tecplot.com/2017/01/05/preplot-szl-convert-overview/) to read ASCII format file.
 
-Tecplot binary file format can be found at [360 data format guid](https://raw.githubusercontent.com/su2code/SU2/master/externals/tecio/360_data_format_guide.pdf) Appendix A.
+Tecplot binary file format can be found at [360 data format guide](https://raw.githubusercontent.com/su2code/SU2/master/externals/tecio/360_data_format_guide.pdf) Appendix A.
 
 ## Installation
 You can install TecIO using pip:
