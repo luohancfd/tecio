@@ -3,9 +3,7 @@
 __author__ = "Han Luo"
 __copyright__ = "Copyright 2024, Han Luo"
 __license__ = "GPL"
-__version__ = "2.0.0"
-__maintainer__ = "Han Luo"
-__email__ = "6806720+luohancfd@users.noreply.github.com"
+__repo__ = "https://github.com/luohancfd/tecio"
 
 import numpy as np
 import enum
@@ -589,6 +587,7 @@ class TecplotMatrix(construct.Construct):
             cell_centered = cell_centered(context)
         if not isinstance(cell_centered, bool):
             raise ValueError("cell_centered should be a bool")
+        context._cell_centered = cell_centered
 
         zone_type = self.zone_type
         if callable(zone_type):
@@ -599,6 +598,8 @@ class TecplotMatrix(construct.Construct):
         discard = self.discard
         if 'discard' in context:
             discard = context.discard
+
+        del context._cell_centered
 
         mshape = list(obj.shape)
         ijk = self.mshape_to_ijk(mshape, cell_centered, zone_type)
@@ -987,9 +988,9 @@ class TypeTecplotDataBlock:
 def gen_data_struct(variables: list[str], zone: Union[dict, construct.Container], read_data_=True):
     if isinstance(zone, dict):
         zone = construct.Container(**zone)
-    if 'zone_type' not in zone:
-        zone.zone_type = ZoneType.ORDERED
     nvar = len(variables)
+    tmp = gen_zone_struct(nvar)
+    zone = tmp.parse(tmp.build(zone)) # ensure there is no missing values in zone
     return Struct(
         "offset_start" / Tell,
         Const(Float.build(299.0)),
@@ -1007,7 +1008,7 @@ def gen_data_struct(variables: list[str], zone: Union[dict, construct.Container]
             this.nvar_zone,
             TecplotMatrix(
                 lambda this: VarTypeConstruct[this.data_type[this.ivar_zone[this._index]]],
-                cell_centered=lambda this: zone.var_loc[this.data_type[this.ivar_zone[this._index]]] == VarLoc.CellCentered if 'has_var_loc' in zone and zone.has_var_loc else False,
+                cell_centered=lambda this: zone.var_loc[this.ivar_zone[this._index]] == VarLoc.CellCentered if 'has_var_loc' in zone and zone.has_var_loc else False,
                 ijk=lambda this: zone.ijk if zone.zone_type == ZoneType.ORDERED else [zone.num_pts if not this._cell_centered else zone.num_elems],
                 discard=bool(not read_data_),
                 zone_type=zone.zone_type
