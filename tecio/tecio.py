@@ -990,7 +990,7 @@ def gen_data_struct(variables: list[str], zone: Union[dict, construct.Container]
         zone = construct.Container(**zone)
     nvar = len(variables)
     tmp = gen_zone_struct(nvar)
-    zone = tmp.parse(tmp.build(zone)) # ensure there is no missing values in zone
+    zone = tmp.parse(tmp.build(zone))  # ensure there is no missing values in zone
     return Struct(
         "offset_start" / Tell,
         Const(Float.build(299.0)),
@@ -1154,7 +1154,7 @@ class TecplotFile(construct.Container):
             return None
         elif self.data[izone].shared_connectivity == -1:
             if start_from != 0:
-                return [[j+1 for j in i] for i in self.data[izone].connect]
+                return [[j + 1 for j in i] for i in self.data[izone].connect]
             return [[j for j in i] for i in self.data[izone].connect]
         else:
             return self.get_connect(self.data[izone].shared_connectivity)
@@ -1227,10 +1227,10 @@ class TecplotFile(construct.Container):
         return self.zones[izone].solution_time
 
     def get_min(self, izone: int, ivar: int) -> Union[int, float]:
-        return self.data[izone].data[ivar].min
+        return self.data[izone].min_max[ivar][0]
 
     def get_max(self, izone: int, ivar: int) -> Union[int, float]:
-        return self.data[izone].data[ivar].max
+        return self.data[izone].min_max[ivar][1]
 
     def get_dataset_aux(self, name):
         if self.has_dataset_aux:
