@@ -40,6 +40,7 @@ __all__ = [
     'TecHeader',
     'TecGeom',
     'TecDatasetAux',
+    'TecplotMarker',
     'TecStr',
     'ZoneType',
     'VarLoc',
@@ -78,6 +79,7 @@ def find_preplot():
 
 
 PREPLOT = find_preplot()
+
 
 
 class ZoneType(enum.IntEnum):
@@ -297,6 +299,15 @@ class Color(enum.IntEnum):
     LightMaroon = Custom56
 
 
+class TecplotMarker(float, enum.Enum):
+    Geometry = 399.0
+    Text = 499.0
+    Zone = 299.0
+    DatasetAux = 799.0
+    VariableAux = 899.0
+    EOH = 357.0
+
+
 class EnumInt(construct.Adapter):
     def __init__(self, penum: enum.IntEnum, subcon=Int):
         super().__init__(subcon)
@@ -332,7 +343,7 @@ class TecplotString(construct.Adapter):
     def _encode(self, obj, context, path):
         if obj == "":
             return b""
-        return b"".join([self.encoder.build(ord(i)) for i in obj])
+        return b"".join([self.encoder.build(ord(i)) for i in str(obj)])
 
     def _emitparse(self, code):
         raise NotImplementedError
@@ -666,7 +677,7 @@ class TypeTecplotAuxVar:
 
 
 TecDatasetAux = Struct(
-    Const(Float.build(799.0)),
+    Const(Float.build(TecplotMarker.DatasetAux)),
     "name" / TecStr,  # Variable names
     Const(Int.build(0)),
     "value" / TecStr,
@@ -680,7 +691,7 @@ class TypeTecplotAuxVar2:
 
 
 TecVariableAux = Struct(
-    Const(Float.build(899.0)),
+    Const(Float.build(TecplotMarker.VariableAux)),
     "variable" / Int,
     "name" / TecStr,  # Variable name,
     Const(Int.build(0)),
@@ -748,7 +759,7 @@ class TypeTecplotGeom:
 
 
 TecGeom = Struct(
-    Const(Float.build(399.0)),
+    Const(Float.build(TecplotMarker.Geometry)),
     "igeom" / Index,
     "coord_sys" / Default(EnumInt(CoordSys), CoordSys.Grid),
     "scope" / Default(EnumInt(GeomScope), GeomScope.Global),
@@ -883,7 +894,7 @@ class TypeTecplotText:
 
 
 TecText = Struct(
-    Const(Float.build(499.0)),
+    Const(Float.build(TecplotMarker.Text)),
     "coord_sys" / Default(EnumInt(CoordSys), CoordSys.Grid),
     "scope" / Default(EnumInt(GeomScope), GeomScope.Global),
     "x0" / Default(Double, 0.0),
@@ -933,7 +944,7 @@ def gen_zone_struct(nvar: int):
     return Struct(
         "offset_start" / Tell,
         "izone" / Index,
-        Const(Float.build(299.0)),  # Zone marker
+        Const(Float.build(TecplotMarker.Zone)),  # Zone marker
         "title" / Default(TecStr, "ZONE 001"),  # Zone name
         Const(Int.build(-1)),  # Parent Zone
         "time_strand" / Default(Int, -2),  # StrandID
@@ -955,10 +966,9 @@ def gen_zone_struct(nvar: int):
         "__integrity__" / Check(lambda this: bool(this.ijk is None) != bool(this.num_elems is None)),
         "aux_vars" / Default(GreedyRange(
             Struct(
-                StopIf(Peek(Int) == 0),
                 Const(Int.build(1)),
                 "name" / TecStr,
-                Const(Int.build(0)),
+                Const(Int.build(0)),  # Auxiliary Value Format
                 "value" / TecStr,
             ),
         ), []),
@@ -993,7 +1003,7 @@ def gen_data_struct(variables: list[str], zone: Union[dict, construct.Container]
     zone = tmp.parse(tmp.build(zone))  # ensure there is no missing values in zone
     return Struct(
         "offset_start" / Tell,
-        Const(Float.build(299.0)),
+        Const(Float.build(TecplotMarker.Zone)),
         "data_type" / Default(Array(nvar, EnumInt(VarType)), [VarType.Float] * nvar),
         "has_passive_var" / Default(Bool, True),
         "passive_var" / Default(If(this.has_passive_var, Array(nvar, Int)), [0] * nvar),
@@ -1112,26 +1122,26 @@ class TecplotFile(construct.Container):
             zone_struct = gen_zone_struct(self.nvar)
             while not reachingEOHM:
                 marker = float_peek.parse_stream(f)
-                if marker == 399.0:
+                if marker == TecplotMarker.Geometry:
                     Peek(TecGeom).parse_stream(f)
                     self.has_geometry = True
                     self.geometries += GreedyRange(TecGeom).parse_stream(f)
-                elif marker == 499.0:
+                elif marker == TecplotMarker.Text:
                     Peek(TecText).parse_stream(f)
                     self.has_text = True
                     self.texts += GreedyRange(TecText).parse_stream(f)
-                elif marker == 299.0:
+                elif marker == TecplotMarker.Zone:
                     Peek(zone_struct).parse_stream(f)
                     self.zones += GreedyRange(zone_struct).parse_stream(f)
-                elif marker == 799.0:
+                elif marker == TecplotMarker.DatasetAux:
                     Peek(TecDatasetAux).parse_stream(f)
                     self.has_dataset_aux = True
                     self.dataset_aux += GreedyRange(TecDatasetAux).parse_stream(f)
-                elif marker == 357.0:
+                elif marker == TecplotMarker.EOH:
                     self.has_data = True
-                    Const(Float.build(357.0)).parse_stream(f)
+                    Const(Float.build(TecplotMarker.EOH)).parse_stream(f)
                     break
-                elif marker == 899.0:
+                elif marker == TecplotMarker.VariableAux:
                     Peek(TecVariableAux).parse_stream(f)
                     self.has_variable_aux = True
                     self.variable_aux += GreedyRange(TecVariableAux).parse_stream(f)

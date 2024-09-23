@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tecio"
-version = "2.0.4"
+version = "2.0.5"
 authors = [
   { name="Han Luo", email="6806720+luohancfd@users.noreply.github.com" },
 ]
