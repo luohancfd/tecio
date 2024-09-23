@@ -1,0 +1,15 @@
+name: Refresh stats
+on:
+  push:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: refresh badges
+        uses: b3b00/refreshBadgesAction@v1.0.7
+        with:
+          repository : ${{ github.repository }}
+          branch: master
