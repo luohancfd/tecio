@@ -509,12 +509,12 @@ class TecplotMatrix(construct.Construct):
                 elif data.ndim == 3:
                     data = np.append(
                         data,
-                        np.zeros_like(data[1, :, :]).reshape((1, data.shape[1], data.shape[2])),
+                        np.zeros((1, data.shape[1], data.shape[2]), dtype=data.dtype),
                         axis=0
                     )
                     data = np.append(
                         data,
-                        np.zeros_like(data[:, 1, :]).reshape((data.shape[0], 1, data.shape[2])),
+                        np.zeros((data.shape[0], 1, data.shape[2]), dtype=data.dtype),
                         axis=1
                     )
                     return data
